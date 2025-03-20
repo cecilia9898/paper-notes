@@ -8,9 +8,9 @@
   - 支持从多个渠道（如 `conda-forge`、`bioconda`）安装软件。
 - **例子：**  
   ```bash
-  mamba create -n my_env python=3.9
+  mamba create -n my_env python=3.10
   ```
-  创建一个名为 `my_env` 的 Python 3.9 环境。
+  创建一个名为 `my_env` 的 Python 3.10 环境。
 
 ## 2. Sourmash
 - **是什么？**  
