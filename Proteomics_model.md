@@ -32,8 +32,22 @@ input_file = "0012_spsion_zixuan.csv"
 4. 分层分割后，验证长度分布和 y_true 分布，确保效果
 
 第三个特征处理板块：feature_process
-1. 
+1. 🧬 Peptide 序列 (Peptide)
+- 用自定义的 parser 处理氧化修饰（M* → "M(ox)"
+- 然后转成固定长度（32）的整数数组，用于表示氨基酸种类。
 
+2. ⚡ Precursor Charge (PrecusorCharge)
+- 用 OneHotEncoder 进行独热编码。
+
+3. 🔥 Collision Energy (collision_energy)
+- 同样是 OneHotEncoder
+
+4. 💣 Fragmentation (fragmentation)
+- 手动映射 ['cid', 'hcd'] → one-hot
+
+5. charge_tensor, ce_tensor, pep_tensor, frag_tensor 全都用 torch.cat(..., dim=1) 拼在了一起作为模型输入。
+
+6.归一化之后的 y_true = top10_SN_ratio，转成了 torch.float32 类型，配合模型训练
 
 
 
