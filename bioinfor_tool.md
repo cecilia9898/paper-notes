@@ -47,4 +47,25 @@
 - **Mamba**: 管理环境和包，快如闪电。
 - **Sourmash**: 快速比对序列，生物信息学的利器。
 - **Snakemake**: 自动化工作流，科研效率翻倍。
- 
+
+---
+
+## 4. `ipykernel` 是什么？
+
+- 全称：`IPython Kernel`  
+- 简单说：它是一个 Python 的“后台发动机”，专门让 Jupyter Notebook（或类似工具）能跑 Python 代码。  
+- 通俗比喻：想象 Jupyter Notebook 是个前台界面（像个计算器），你输入代码后，它得有个“发动机”在背后算结果，这个发动机就是 `ipykernel`。
+
+- **它干啥用？**
+
+  - 核心作用：连接 Jupyter Notebook 和 Python 环境。  
+  - 你在 Notebook 里写代码（比如 `print("Hello")`），`ipykernel` 负责把代码送到 Python 解释器跑，然后把结果送回来显示。  
+  支持多环境：如果你有好几个 Python 环境（比如用 Conda 建的 `proteomics_env`），可以用不同的 `ipykernel` 让 Notebook 切换环境跑代码。
+
+- **跟 Conda 有啥关系？**
+
+  - 你之前用 `conda create -p ~/envs/proteomics_env python=3.12` 建了个环境，如果想在 Jupyter Notebook 里用这个环境的 Python，就得装 `ipykernel`。  
+  - 装了 `ipykernel` 后，可以把这个环境“注册”到 Jupyter，让你选它跑代码。
+
+---
+
