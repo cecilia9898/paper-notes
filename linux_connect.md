@@ -13,3 +13,14 @@
 - -n 申请核心
 - /bin：这是 Linux 文件系统中的一个目录，通常存放系统的基础可执行文件（二进制文件）。
 - Bash 是一种 shell（命令行解释器），负责接收用户输入的命令，解释并执行它们
+
+
+# 从终端连接 Wanglab 电脑 #
+- 之前已经设置好了，直接输入下列指令可以连入
+  ` ssh wanglab `
+- 包括连入 hpc，输入下面就行
+  ` ssh hpc `
+
+## 已经在 wanglab 装好 micromamba, pytorch, snakemake, 以及各种数据包(例如numpy, pandas) ##
+- 已经设置好指令，要退出 micromamba 环境，直接输入
+  ` bye `
