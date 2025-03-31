@@ -24,3 +24,7 @@
 ## 已经在 wanglab 装好 micromamba, pytorch, snakemake, 以及各种数据包(例如numpy, pandas) ##
 - 已经设置好指令，要退出 micromamba 环境，直接输入
   ` bye `
+
+## 在 mac 保存了脚本，能够将 proteomics_model_2 文件夹的代码同步传递到 wanglab ##
+- 打开 ` nano sync_proteomics_wanglab.sh `
+- 运行 ` ~/sync_proteomics_wanglab.sh `
