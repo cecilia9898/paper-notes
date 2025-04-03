@@ -68,3 +68,89 @@
 ## 对于 proteomics 项目，运行 snakemake ##
 - 用 --config 参数从命令行传: ` snakemake -np --config input_csv=data/0012_spsion_zixuan.csv `
 
+## 看建立的环境是否有 pytorch ##
+- 因为 PyTorch 不是一个独立的可执行文件（不像 python、pip 这种），所以终端不会告诉你路径。
+- 在终端输入：` pip show torch `
+
+## Python 虚拟环境退出指南 ##
+
+| 环境类型            | 激活方式示例                                 | 退出方式                           | 说明 |
+|---------------------|----------------------------------------------|------------------------------------|------|
+| **venv**            | `source env/bin/activate`                    | `deactivate`                       | Python 官方内建 |
+| **virtualenv**      | `source env/bin/activate`                    | `deactivate`                       | 和 venv 一样 |
+| **conda**           | `conda activate myenv`                       | `conda deactivate`                 | 来自 Anaconda/Miniconda |
+| **mamba**           | `mamba activate myenv`                       | `mamba deactivate`                 | conda 的加速替代 |
+| **micromamba**      | `micromamba activate myenv`                  | `micromamba deactivate`            | 超轻量，需先初始化 shell |
+| **pipenv**          | `pipenv shell`                               | `exit` 或 `Ctrl+D`                 | 开了一个子 shell，直接退出 |
+| **poetry**          | `poetry shell`                               | `exit` 或 `Ctrl+D`                 | 同上，退出 subshell 即可 |
+| **Docker 容器**     | `docker exec -it <container> bash`          | `exit` 或 `Ctrl+D`                 | 技术上也算一种“环境” |
+| **Jupyter kernel**  | 在 Notebook 里选择某个 kernel                | 切换或重启 kernel                  | 不需要手动退出 shell |
+
+
+### 🧠 小贴士
+
+- `deactivate` 是 shell function，不是独立命令，如果环境没完全初始化，可能找不到它。
+- `conda` / `micromamba` 要确保 shell 初始化过：先运行 `source ~/.bashrc`（或 `.zshrc`）。
+- 如果你不确定用的是什么环境，先运行 `which python`，看路径来自哪里。
+- 退出 pipenv / poetry 时记得：**它们打开的是一个新的 shell，退出方法是 `exit` 或 `Ctrl+D`**。
+
+
+### 💡 Bonus：快速判断当前环境类型
+
+- 查看当前使用的 Python 路径
+` which python `
+
+- 示例输出：
+`/home/zixuan/micromamba/envs/ml-env/bin/python`  ← 说明你在 micromamba 环境中 
+
+---
+## 查找 Python 虚拟环境的方法
+
+以下是查找本地 Python 虚拟环境的几种方法，适用于不同工具（如 `micromamba`、`conda`、`venv` 等）。
+
+### 1. 使用 `micromamba` 管理的环境
+
+运行以下命令列出所有 `micromamba` 管理的虚拟环境：
+
+```bash
+micromamba env list
+```
+
+输出示例：
+```
+Name                    Path
+ml-env                  /home/zixuan/micromamba/envs/ml-env
+sfcm-env                /home/zixuan/micromamba/envs/sfcm-env
+base                    /home/zixuan/micromamba
+```
+
+- **说明**：当前激活的环境会在名称前显示 `*`。
+
+### 2. 使用 `conda` 管理的环境
+
+如果也使用 `conda`，运行：
+
+```bash
+conda env list
+```
+
+输出格式与 `micromamba` 类似。
+
+### 3. 查找手动创建的 `venv` 环境
+
+对于用 `python -m venv` 创建的环境，假设存放在 `~/.envs/`：
+
+```bash
+ls ~/.envs/
+```
+
+或搜索用户目录下所有可能的 `venv` 路径：
+
+```bash
+find ~ -type d -name "bin" -path "*/envs/*" 2>/dev/null
+```
+
+---
+## 已经写好 bash 脚本可以自动用 micromamba 创建环境，下载安装包
+- 脚本文件保存在：` ~/Documents/bash_script `
+- 每次运行 ` source scfm_env.sh `, 环境就自动创建好！
