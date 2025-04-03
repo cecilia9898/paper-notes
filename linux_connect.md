@@ -154,3 +154,59 @@ find ~ -type d -name "bin" -path "*/envs/*" 2>/dev/null
 ## 已经写好 bash 脚本可以自动用 micromamba 创建环境，下载安装包
 - 脚本文件保存在：` ~/Documents/bash_script `
 - 每次运行 ` source scfm_env.sh `, 环境就自动创建好！
+
+---
+Absolutely，给你一个 **简约又清晰的 Markdown 版本**，适合贴进笔记、README 或你自己的 HPC 文档 ✅
+
+---
+
+## 📝 Bash 脚本编写与执行流程
+
+```bash
+# 1. 使用 nano 新建脚本
+nano setup.sh
+```
+
+> 在编辑器中粘贴你的脚本内容，比如：
+
+```bash
+#!/bin/bash
+echo "Hello, world!"
+```
+
+```bash
+# 2. 保存并退出 nano
+# Ctrl + O（写入），Enter（确认），Ctrl + X（退出）
+
+# 3. 添加执行权限
+chmod +x setup.sh
+
+# 4. 运行脚本
+./setup.sh
+
+# 5. 可选：运行并记录日志
+./setup.sh | tee run_log.txt
+```
+
+## 🔍 常用指令
+
+```bash
+# 查看脚本内容
+cat setup.sh
+
+# 再次编辑脚本
+nano setup.sh
+
+# 检查是否具有执行权限（应有 x 权限）
+ls -l setup.sh
+```
+
+---
+## 删除 Micromamba 已有的环境 ##
+- ` micromamba env list `
+- ` micromamba remove -n sfcm_env --all `
+- 检查是否还有：` micromamba env list `
+- 不行的话删除还剩的目录：` rm -rf /home/zixuan/micromamba/envs/sfcm_env `
+
+---
+
