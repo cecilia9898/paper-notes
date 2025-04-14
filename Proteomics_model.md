@@ -20,6 +20,10 @@ input_file = "0012_spsion_zixuan.csv"
 
 - 将 训练/验证/测试集 比例调整为 60/20/20
 
+输出：得到
+        train="data/train_split.csv",
+        val="data/val_split.csv",
+        test="data/test_split.csv"
 
 第二个数据预处理板块：preprocess
 1. 将 top10_SN_ratio 这一列的数定义为 y_true, 并做以下处理：
@@ -30,6 +34,8 @@ input_file = "0012_spsion_zixuan.csv"
 2. 全局标准化（用训练集的 y_min 和 y_max）
 3. 由于 y_true 有高值和低值少、中值多的不平衡问题，所以对于 y_true 进行加权采样，将加权采样分别应用于训练集，而测试集验证集未使用加权采样。增加高值和低值样本的采样频率，使模型更关注这些稀有区域，从而缓解中值主导的问题。
 4. 分层分割后，验证长度分布和 y_true 分布，确保效果
+
+注：（用训练集的 y_min 和 y_max）分别一个一个对 train,val,test 数据集进行处理，防止信息泄露
 
 第三个特征处理板块：feature_process
 1. 🧬 Peptide 序列 (Peptide)
@@ -49,7 +55,10 @@ input_file = "0012_spsion_zixuan.csv"
 
 6.归一化之后的 y_true = top10_SN_ratio，转成了 torch.float32 类型，配合模型训练
 
+注：也是分别一个一个对 train,val,test 数据集进行处理，防止信息泄露
 
+
+## 建立模型 ##
 
 
 
