@@ -1,4 +1,4 @@
-# Git 上传 Snakemake 项目操作笔记
+# Git 上传项目操作笔记
 
 ## 1. 初始化 Git 仓库并首次提交
 
@@ -84,4 +84,8 @@ git push backup main
 ```bash
 git remote set-url --add --push origin https://github.com/your_old_repo.git
 git remote set-url --add --push origin https://github.com/你的用户名/new_repo.git
+```
+## 9. 创建 toc.md 去记录每步流程
+```bash
+cat > toc.md << EOF
 ```
