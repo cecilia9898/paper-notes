@@ -67,3 +67,21 @@ git push
 https://github.com/cecilia9898/dictys_snakemake
 ```
 
+## 8. 添加第二个 remote，例如叫 backup
+```bash
+git remote add backup https://github.com/用户名/仓库名.git
+```
+- 推送到第一个仓库（origin）
+```bash
+git push origin main
+```
+
+- 推送到第二个仓库（backup）
+```bash
+git push backup main
+```
+- 配置让 git push 一次性推到多个远程仓库
+```bash
+git remote set-url --add --push origin https://github.com/your_old_repo.git
+git remote set-url --add --push origin https://github.com/你的用户名/new_repo.git
+```
