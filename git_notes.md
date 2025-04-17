@@ -1,7 +1,5 @@
 # Git 上传 Snakemake 项目操作笔记
 
-记录从本地初始化 Git 仓库到上传 GitHub、删除多余文件和添加 README 的完整操作流程。
-
 ## 1. 初始化 Git 仓库并首次提交
 
 ```bash
