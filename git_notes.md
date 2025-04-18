@@ -89,3 +89,16 @@ git remote set-url --add --push origin https://github.com/你的用户名/new_re
 ```bash
 cat > toc.md << EOF
 ```
+
+## 10. 更新 github repo 代码
+
+```bash
+
+git status
+cd ~/Documents/sim_snakemake_1
+git add .
+git commit -m "Update workflow"
+git push origin main
+git push backup main
+
+```
