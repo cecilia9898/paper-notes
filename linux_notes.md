@@ -209,4 +209,33 @@ ls -l setup.sh
 - 不行的话删除还剩的目录：` rm -rf /home/zixuan/micromamba/envs/sfcm_env `
 
 ---
+# 用别名 alias 简化命令
+
+## 已在 wanglab 电脑简化以下命令
+```bash
+mamba is aliased to `micromamba'
+act_env is aliased to `micromamba activate sim_env'
+```
+
+## 步骤
+```bash
+nano ~/.bashrc
+```
+- 添加下面两行到文件
+```bash
+# Shorten micromamba commands
+alias mamba="micromamba"
+alias act_env="micromamba activate sim_env"
+```
+-保存并退出（在 nano 中按 Ctrl+O, 回车, 然后 Ctrl+X）
+```bash
+#使 alias 生效
+source ~/.bashrc
+```
+-验证 alias 是否生效
+```bash
+type mamba
+type act_env
+```
+
 
