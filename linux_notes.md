@@ -256,3 +256,10 @@ Host wanglab
 ```bash
 ssh wanglab
 ```
+- 学校的 HPC 同理
+```bash
+Host hpc
+   Hostname hpc.umassmed.edu
+   User zixuan.ye-umw
+   IdentityFile ~/.ssh/hpc_umass_key
+``` 
