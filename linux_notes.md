@@ -250,6 +250,9 @@ nano ~/.ssh/config
 Host wanglab
   HostName wanglab-a16-2.ad.umassmed.edu
   User zixuan
-  IdentityFile ~/.ssh/id_ed25519
+  IdentityFile ~/.ssh/id_ed25519  #This is the key
 ```
-
+- 之后可以输入来直接远程连上
+```bash
+ssh wanglab
+```
