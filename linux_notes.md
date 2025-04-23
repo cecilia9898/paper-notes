@@ -237,5 +237,19 @@ source ~/.bashrc
 type mamba
 type act_env
 ```
+---
 
+## 设置 SSH alias ##
+
+- 打开 ~/.ssh/config 文件
+```bash
+nano ~/.ssh/config
+```
+- 文件末尾加上下面几行
+```bash
+Host wanglab
+  HostName wanglab-a16-2.ad.umassmed.edu
+  User zixuan
+  IdentityFile ~/.ssh/id_ed25519
+```
 
