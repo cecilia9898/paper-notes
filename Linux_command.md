@@ -228,6 +228,17 @@ cat .bashrc
   type python
   # 输出：python is /usr/bin/python
   ```
+### 31. ** -p **
+- 自动创建中间不存在的目录，也不会报错
+
+### 32. ** touch **
+- 创建一个空文件（如果文件不存在），或者更新一下已有文件的时间戳（如果文件已经存在）
+- 💡 因为 Python 把一个文件夹当作“模块”或“包”，前提是这个文件夹里有个 __init__.py 文件。哪怕这个文件是空的，也行。
+- 所以：
+```bash
+touch utils/__init__.py
+```
+- = 我告诉 Python：“utils/ 是个包哦，你可以 import utils.xxx 啦～”
 
 ---
 
