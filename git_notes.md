@@ -102,3 +102,9 @@ git push origin main
 git push backup main
 
 ```
+
+## 11. 记录 github repo 以及关联的命名
+
+- origin main ~ cecilia9898/dictys_snakemake
+- backup main ~ grnlab/private_netlib_pipeline
+- sfcm main ~ grnlab/private_netlib
