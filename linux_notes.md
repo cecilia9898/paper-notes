@@ -262,4 +262,27 @@ Host hpc
    Hostname hpc.umassmed.edu
    User zixuan.ye-umw
    IdentityFile ~/.ssh/hpc_umass_key
-``` 
+```
+
+---
+
+## 创建 symlink 和 利用 alias 简化激活环境的命令
+```bash
+#先进入环境目录
+cd /home/zixuan/micromamba/envs
+ls
+
+#加入 symlink
+ln -s sim_env2 env
+#ln = link, -s = symbolic link
+
+#加 alias
+nano ~/.bashrc
+alias mamba='micromamba'
+source ~/.bashrc
+```
+最后只用输入下面命令就可以轻松激活环境
+
+```
+mamba activate env
+```
