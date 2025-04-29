@@ -105,3 +105,10 @@ git push backup main
 - sfcm main ~ grnlab/private_netlib
 
 
+## 12. 撤回 git init 请求
+```bash
+cd "/Users/zixuanye/Desktop/3 - Yu Lab"
+rm -rf .git
+```
+
+
