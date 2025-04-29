@@ -112,4 +112,11 @@ cd "/Users/zixuanye/Desktop/3 - Yu Lab"
 rm -rf .git
 ```
 
+## 13. 避免 push 被拦住：拉一下再推（rebase）
+```bash
+git pull --rebase origin main
+git push
+```
+
+
 
