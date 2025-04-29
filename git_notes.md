@@ -8,11 +8,6 @@ cd ~/Documents/sim_snakemake_1
 git init
 git add .
 
-# 添加 MIT License
-curl -o LICENSE https://raw.githubusercontent.com/github/choosealicense.com/gh-pages/_licenses/mit.txt
-git add LICENSE
-
-git commit -m "Initial commit: Snakemake workflow with MIT License"
 ```
 
 ## 2. 在 GitHub 上创建新仓库
