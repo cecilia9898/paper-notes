@@ -159,89 +159,39 @@
 
 ---
 
-当然可以，以下是整理好的 **中文版 Docker 与 `.raw` 文件转换相关知识点 Markdown 笔记**，适合用于项目文档或科研笔记。
+# 🐳 What is Docker? Why Use It for `.raw` File Conversion?
+
+## 🔍 What is Docker?
+
+Docker is a **lightweight containerization platform** that allows you to run fully pre-configured software environments—called *containers*—on any system (Linux/Mac/Windows) **without manually installing complex dependencies**.
 
 ---
 
-````markdown
-# 🐳 什么是 Docker？为什么在质谱数据处理中要用它？
+## 💡 Why Use Docker for Mass Spectrometry?
 
-## 🔍 Docker 是什么？
+Thermo `.raw` files require **Windows-only DLLs** to be read properly. On Linux or Mac, you **cannot directly run `msconvert`** unless:
 
-Docker 是一个**轻量级容器平台**，可以让你在任何系统（Linux/Mac/Windows）中运行别人已经配置好的软件环境，称为“容器”。
-
-你不需要手动安装一堆依赖，只需要一条命令就能运行完整的程序，非常适合运行复杂工具（如 ProteoWizard）或者集成到 Snakemake 等自动化流程中。
+- You use **Docker**, which runs the Windows version of ProteoWizard inside a container
+- This method includes all required Thermo libraries (DLLs)
 
 ---
 
-## 💡 为什么质谱处理要用 Docker？
+## ✅ Advantages of Using Docker
 
-Thermo 的 `.raw` 文件只能通过 **Windows 下的 DLL 文件** 正确读取。而 ProteoWizard 的 `msconvert` 工具在 Linux 上的原生版本并不支持读取 `.raw`。
-
-使用 Docker，可以在 Linux 中模拟 Windows 环境，**让你在 Linux 上也能运行支持 `.raw` 的 `msconvert`**。
-
----
-
-## ✅ 使用 Docker 的优势
-
-| 功能                       | 不使用 Docker               | 使用 Docker                               |
-|----------------------------|------------------------------|--------------------------------------------|
-| Linux 读取 `.raw` 支持     | ❌ 不支持 Thermo DLL          | ✅ 可通过 Wine 在容器中运行                |
-| 依赖配置是否复杂           | ✅ 手动安装，容易出错         | ❌ 已封装好，开箱即用                      |
-| 是否适合批量分析           | ❌ 难以集成自动流程           | ✅ 适合 Snakemake / Nextflow / 脚本运行     |
-| 能否调用 Windows 工具      | ❌ Linux 无法运行 `.exe` 文件 | ✅ 容器内可运行 `msconvert.exe`             |
+| Feature                     | Without Docker          | With Docker                              |
+|----------------------------|--------------------------|-------------------------------------------|
+| Cross-platform `.raw` support | ❌ Only on Windows       | ✅ Linux & Mac supported via containers    |
+| Manual installation needed | ✅ Complex setups         | ❌ Pre-installed inside the container      |
+| Suitable for pipelines     | ❌ Difficult to automate  | ✅ Easily scriptable in Snakemake/Nextflow |
+| Compatible with Thermo DLL | ❌ Not available on Linux | ✅ Pre-bundled in Docker image             |
 
 ---
 
-## 🛠️ 如何检查是否已安装 Docker
+## 🛠️ How to Check if Docker is Installed
 
-在终端中运行：
+In your terminal (Linux):
 
 ```bash
 docker --version
-````
-
-* ✅ 如果输出版本号，说明已经安装
-* ❌ 如果提示 “command not found”，说明你还没有安装
-
----
-
-## 🔧 在 Linux 上安装 Docker（以 Ubuntu 为例）
-
-```bash
-sudo apt-get update
-sudo apt-get install docker.io
-sudo systemctl start docker
-sudo systemctl enable docker
-sudo usermod -aG docker $USER  # 可选：让当前用户不加 sudo 也能用 docker
-```
-
-然后测试：
-
-```bash
-docker run hello-world
-```
-
----
-
-## 🚀 用 Docker 批量转换 `.raw` → `.mzML`
-
-使用带 DLL 的官方社区镜像：
-
-```bash
-docker run -it --rm \
-  -v $PWD/04_data:/data_in \
-  -v $PWD/06_data:/data_out \
-  chambm/pwiz-skyline-i-agree-to-the-vendor-licenses \
-  wine msconvert /data_in/ea00123.raw --mzML -o /data_out
-```
-
-解释：
-
-* `-v` 是把本地目录挂载到容器中
-* `wine msconvert` 是在容器里运行 Windows 的 `msconvert.exe`
-* `--mzML` 指定输出格式为 mzML
-
----
 
 
