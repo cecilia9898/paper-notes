@@ -138,6 +138,19 @@
 | Portability/Sharing   | ❌ Binary, large               | ✅ Compressible, transferable    |
 
 ---
+## ⚖️ Key Differences Between `.mzML` and `.mzXML`
+
+| Feature                     | `.mzML` ✅ Recommended Format | `.mzXML` ❌ Older Format |
+|----------------------------|------------------------------|--------------------------|
+| Latest Standard            | ✅ Yes                        | ❌ No (deprecated)       |
+| Rich Metadata Support      | ✅ Supports more instrument parameters | ❌ Limited support |
+| HUPO-PSI Endorsed          | ✅ Yes (official recommendation) | ❌ No                |
+| Compression Support (zlib) | ✅ Yes                        | ❌ No                    |
+| Tool Compatibility         | ✅ Broad support              | ⚠️ Still supported by some, but being phased out |
+| File Size                  | ⚠️ Slightly larger (can be compressed) | ✅ Slightly smaller (but uncompressed) |
+
+> TL;DR: Use `.mzML` unless you have a very specific reason not to. It's the future-proof choice.
+---
 
 ## ✅ When to Use `.mzML`
 
