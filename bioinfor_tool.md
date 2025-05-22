@@ -110,3 +110,50 @@
 
 ---
 
+# 🧬 What is `.mzML` and Why Use It?
+
+## 📌 Definition
+`.mzML` is an **open standard file format** for mass spectrometry data, developed by HUPO-PSI. It stores both raw spectral data and rich metadata in a vendor-neutral, XML-based structure.
+
+---
+
+## 🔬 What `.mzML` Contains
+
+- MS1 / MS2 **scan-level spectra**
+- **m/z and intensity** pairs for each scan
+- **Retention time**, **scan number**, **charge state**
+- Instrument settings and acquisition metadata
+
+---
+
+## 🆚 `.raw` vs `.mzML`
+
+| Feature               | `.raw` (Vendor Format)       | `.mzML` (Open Standard)          |
+|-----------------------|------------------------------|----------------------------------|
+| Readability           | ❌ Requires Thermo SDK        | ✅ Readable in R/Python/C++      |
+| Platform Support      | ❌ Windows-only               | ✅ Cross-platform (Linux/Mac/Win)|
+| Tool Compatibility    | ❌ Few tools (`rawrr`)        | ✅ Broad support: `mzR`, `Spectra`, `MSnbase`, `OpenMS`, etc. |
+| Automation-Friendly   | ❌ Difficult for pipelines     | ✅ Ideal for Snakemake/Nextflow  |
+| Community Support     | 👎 Proprietary                | 👍 Standard in PRIDE, MassIVE    |
+| Portability/Sharing   | ❌ Binary, large               | ✅ Compressible, transferable    |
+
+---
+
+## ✅ When to Use `.mzML`
+
+- You work on **Linux or Mac**
+- You need **batch processing or reproducible pipelines**
+- You want to use R/Python libraries like `mzR`, `Spectra`, `MSnbase`
+- You plan to **share or publish** data (PRIDE, MassIVE, etc.)
+- You need a format that integrates well with **Snakemake workflows**
+
+---
+
+## 🛠️ How to Convert `.raw` → `.mzML`
+
+1. **Install** [ProteoWizard](https://proteowizard.sourceforge.io/)
+2. **Convert** using the command line:
+
+   ```bash
+   msconvert your_file.raw --mzML -o output_folder/
+
