@@ -257,6 +257,4 @@ docker run -it --rm \
   -v $PWD/06_data:/data_out \
   chambm/pwiz-skyline-i-agree-to-the-vendor-licenses \
   wine msconvert /data_in/sample.raw --mzML -o /data_out
-
 ---
-
