@@ -48,3 +48,8 @@
 
 ---
 
+## MS1 和 MS2 在结构上非常相似，区别主要是：
+
+- MS2 多了 precursorList 字段用于记录前体信息；
+
+- MS1 有 MS1 spectrum 标志，而 MS2 是 MSn spectrum
