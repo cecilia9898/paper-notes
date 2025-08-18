@@ -4,7 +4,7 @@ Synchronous Precursor Selection (SPS) is used in TMT-based MS3 quantification to
 
 ---
 
-## 1. **Keep the top 200 MS2 ions**
+## 1. **Keep the top 10 MS2 ions at each scan_i(settings)**
 
 * **Goal**: Select the most intense fragment ions to ensure high signal-to-noise ratio (S/N).
 * **Reason**: Low-intensity ions are more likely to be noise or irrelevant background.
@@ -73,7 +73,7 @@ Synchronous Precursor Selection (SPS) is used in TMT-based MS3 quantification to
 
 ---
 
-## 1. **保留最强的 200 个 MS2 离子**
+## 1. **保持前10个MS2离子在每个scan_i（设置）**
 
 * **解释**：从 MS2 谱图中按强度降序排序，选择最强的前 200 个离子。
 * **目的**：
