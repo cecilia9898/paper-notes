@@ -18,4 +18,7 @@
 
 ---
 # Cell Lines Used for shaoxian's sample in This Study
+
+| Cell line | 来源 (Origin) | 特点 (Key Features) | 应用 (Applications) |
+|-----------|--------------|---------------------|---------------------|
 | **HeLa** | 宫颈癌 (Cervical cancer) | 增殖力强，最经典细胞系 (Highly proliferative, most widely used cell line) | 广泛用于生物医学研究 (Widely used in biomedical research) |
