@@ -118,5 +118,96 @@ git pull --rebase origin main
 git push
 ```
 
+好，那我帮你整理一个**只用 SSH 的完整 CLI 版**，照着走就能把本地仓库推到 GitHub 👇
+
+---
+
+# GitHub 仓库设置 & 推送（SSH 版）
+
+## 0) 初始化本地仓库（如果还没做）
+
+```bash
+cd /mnt/c/Users/cecilia.DESKTOP-8JQ74OI/Documents/03_DIA_QUANT
+git init
+echo "# 03_DIA_QUANT" > README.md
+git add README.md
+git commit -m "chore: initial commit"
+git branch -M main
+```
+
+---
+
+## 1) 确认 SSH 能连上 GitHub
+
+```bash
+ssh -T git@github.com
+```
+
+* 如果输出：
+
+  ```
+  Hi cecilia9898! You've successfully authenticated...
+  ```
+
+  说明 SSH key 已经配置好，可以直接用。
+* 如果失败：
+
+  ```bash
+  eval "$(ssh-agent -s)"
+  ssh-add ~/.ssh/id_ed25519   # 或你实际的私钥名，比如 id_ed25519_wsl
+  ssh -T git@github.com
+  ```
+
+---
+
+## 2) 设置远端地址为 SSH
+
+```bash
+git remote add origin git@github.com:YuLabProteomics/03_DIA_QUANT.git
+# 如果已经存在 origin：
+git remote set-url origin git@github.com:YuLabProteomics/03_DIA_QUANT.git
+```
+
+检查：
+
+```bash
+git remote -v
+```
+
+应该显示：
+
+```
+origin  git@github.com:YuLabProteomics/03_DIA_QUANT.git (fetch)
+origin  git@github.com:YuLabProteomics/03_DIA_QUANT.git (push)
+```
+
+---
+
+## 3) 推送到远端
+
+```bash
+git push -u origin main
+```
+
+以后只要做了修改，三步即可：
+
+```bash
+git add -A
+git commit -m "update something"
+git push
+```
+
+---
+
+## 常见问题
+
+* `src refspec main does not match any` → 说明你还没 commit，回到 **0) 初始化** 做一次提交。
+* `Permission denied (publickey)` → SSH key 没加到 GitHub，去 GitHub **Settings → SSH and GPG keys** 把公钥加上。
+* 如果有多个 SSH key，记得用 `ssh-add` 确保正确的 key 在 agent 里。
+
+---
+
+
+
 
 
