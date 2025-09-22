@@ -38,3 +38,64 @@ FAIMS 的全称是 **Field Asymmetric Ion Mobility Spectrometry**，中文一般
 ## 🎯 一句话总结
 - **科研电脑**：个人单兵作战工具，适合轻量分析。  
 - **SCI Cluster**：科研界“数据工厂”，能帮你同时跑成百上千个任务，还能带你玩转深度学习和超大数据。
+
+---
+好问题！你看到的 `.parquet` 文件，其实是一种 **列式存储的表格数据格式**，全名叫 **Apache Parquet**。
+
+---
+
+## 🗂️ 什么是 `.parquet`？
+
+* 类似于 `.csv` 或 `.tsv`，本质就是 **表格**。
+* 但它不是一行行存的，而是 **按列压缩存储**，这样：
+
+  * **读写快**（尤其是只需要某几列时）；
+  * **文件小**（压缩率高）；
+  * **兼容大数据生态**（Hadoop、Spark、Arrow 都支持）。
+
+---
+
+## 🔬 在 DIA-NN 里的 `.parquet`
+
+* DIA-NN 的新版默认输出结果（比如 `report.parquet`、`report-lib.parquet`）就是这种格式。
+* 它包含的内容和 `.tsv` 类似（比如识别到的 peptide、precursor、protein、强度等），只是换了个更现代的存储方式。
+
+---
+
+## 🛠️ 怎么打开？
+
+* **Python / Jupyter**：
+
+  ```python
+  import pandas as pd
+  df = pd.read_parquet("astral_20250922_report.parquet")
+  print(df.head())
+  ```
+* **R**：
+
+  ```R
+  library(arrow)
+  df <- read_parquet("astral_20250922_report.parquet")
+  head(df)
+  ```
+* **命令行**（Linux）：
+
+  ```bash
+  parquet-tools head astral_20250922_report.parquet
+  ```
+* **Excel**：不能直接打开，需要先转成 `.csv`：
+
+  ```python
+  df.to_csv("report.csv", index=False)
+  ```
+
+---
+
+## 📊 小结
+
+* `.parquet` = 压缩过的高性能表格文件。
+* DIA-NN 输出的 `.parquet` **= 你要分析的识别/定量结果表**。
+* 打开方式：推荐用 **pandas (Python)** 或 **arrow (R)**。
+
+---
+
