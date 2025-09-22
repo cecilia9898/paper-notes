@@ -74,3 +74,4 @@
   --mbr 1 --matrices --qvalue 0.01 `
   --threads 8
 ```
+<img width="1942" height="1171" alt="image" src="https://github.com/user-attachments/assets/b0b3906b-b732-41b1-abf6-17f5f350b9f8" />
