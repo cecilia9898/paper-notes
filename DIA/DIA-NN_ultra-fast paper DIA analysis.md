@@ -31,7 +31,7 @@
   --use-window-file "D:\astral_windows.csv" `
   --mass-acc 0 --mass-acc-ms1 0 `
   --mbr 1 --matrices --qvalue 0.01 `
-  --threads 8
+  --threads 7
 ```
 
 ---
@@ -57,7 +57,7 @@
   --fragment-range 200 1800 `
   --mass-acc 0 --mass-acc-ms1 0 `
   --mbr 1 --matrices --qvalue 0.01 `
-  --threads 8
+  --threads 7
 ```
 
 ---
@@ -72,6 +72,6 @@
   --use-window-file "D:\astral_windows.csv" `
   --mass-acc 0 --mass-acc-ms1 0 `
   --mbr 1 --matrices --qvalue 0.01 `
-  --threads 8
+  --threads 7
 ```
 <img width="1942" height="1171" alt="image" src="https://github.com/user-attachments/assets/b0b3906b-b732-41b1-abf6-17f5f350b9f8" />
