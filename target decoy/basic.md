@@ -262,4 +262,57 @@ $$
 ---
 
 
+## 🔹 传统 target–decoy 做法
+
+* 在 DIA-NN / Spectronaut 里，TDA 是用 **target 库 + decoy 库**（打乱或反向的肽段序列），来估计随机匹配的假阳性比例。
+* 再根据 **q-value cutoff (通常 1%)** 过滤结果，控制 FDR。
+* 这是一种 **基于规则/特征工程** 的统计方法。
+
+---
+
+## 🔹 DIA-BERT 的创新点
+
+1. **预训练 + 大规模数据构建正负样本**
+
+   * 训练集里的 **正样本**：用 DIA-NN 和 Spectronaut 确认的 target precursors。
+   * **负样本（decoy）**：用旧版本 DIA-NN (v1.7.12, q-value=0.1) 输出的 decoy precursors，并保留其 RT 信息。
+   * 如果 decoys 太多，会下采样，保证 target/decoy 数量平衡。
+   * 这样，模型学到的“错误匹配模式”远比传统的“随机反向序列”要丰富和真实。
+
+2. **端到端 Transformer 学习，而不是手工特征 + decoy count**
+
+   * 把 target 和 decoy 的 **peak group 矩阵**（m/z × RT × intensity）直接丢进 BERT 模型。
+   * 让模型自己学会分辨 “真正的 target signal” vs “decoy noise”。
+   * 不再依赖手工定义的打分特征（比如 XIC correlation, co-elution score）。
+
+3. **两阶段策略，进一步稳健化 FDR 控制**
+
+   * **预过滤模型**：先粗筛 target/decoy peak groups。
+   * **预训练 scoring 模型**：在大规模 target–decoy 数据集上学全局规律。
+   * **fine-tuning**：在单个 DIA 文件上再调优 → 更适应实验 batch 差异。
+   * 最终依然用 FDR < 1% 作为 cutoff，但因为模型学到的“负例”更真实，所以估计更稳健。
+
+4. **Conservative FDR with two-species spectral library**
+
+   * 除了常规 TDA，DIA-BERT 还引入了 **two-species library** (human + yeast) 作为“真实外部负对照”。
+   * Conservative FDR = (yeast IDs / human IDs) × (human total / yeast total)。
+   * 这种估计更严格，避免低估 FDR。
+
+---
+
+## 🔹 总结
+
+* DIA-BERT 没有完全抛弃 target–decoy，而是：
+
+  * **升级 decoy**：不仅用随机序列，还用真实 decoy 识别结果（带 retention time & peak group）。
+  * **引入 deep learning**：让 Transformer 从 target/decoy 中直接学到复杂区分模式。
+  * **加 conservative FDR**：用两物种库交叉验证，进一步提高结果可信度。
+
+👉 所以它的创新点在于：把传统的 TDA **从简单计数 → 深度学习分类问题**，再结合更严格的 cross-species FDR。
+
+---
+
+<img width="1589" height="964" alt="output (3)" src="https://github.com/user-attachments/assets/94961200-b061-4805-beee-7d6aa1fd0750" />
+
+
 
