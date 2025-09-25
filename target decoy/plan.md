@@ -216,7 +216,7 @@
 
 ---
 
-## 你可以直接“站在肩膀上”的组合拳（可写进计划书）
+## 你可以直接“站在肩膀上”的组合拳
 
 1. **RTS/RTLS 的思想 + 你老师的规则**
 
@@ -242,11 +242,64 @@
 
 ---
 
-[1]: https://pmc.ncbi.nlm.nih.gov/articles/PMC7295121/?utm_source=chatgpt.com "Full-Featured, Real-Time Database Searching Platform ..."
-[2]: https://pmc.ncbi.nlm.nih.gov/articles/PMC11554524/?utm_source=chatgpt.com "Real-time spectral library matching for sample multiplexed ..."
-[3]: https://pubmed.ncbi.nlm.nih.gov/17295354/?utm_source=chatgpt.com "Development and validation of a spectral library searching ..."
-[4]: https://pmc.ncbi.nlm.nih.gov/articles/PMC11492813/?utm_source=chatgpt.com "Spectral entropy outperforms MS/MS dot product similarity ..."
-[5]: https://pubmed.ncbi.nlm.nih.gov/17952086/?utm_source=chatgpt.com "Semi-supervised learning for peptide identification from ..."
-[6]: https://pmc.ncbi.nlm.nih.gov/articles/PMC3489532/?utm_source=chatgpt.com "A statistical model-building perspective to identification of MS/MS ..."
-[7]: https://academic.oup.com/bioinformatics/article/36/Supplement_2/i745/6055912?utm_source=chatgpt.com "New mixture models for decoy-free false discovery rate ..."
-[8]: https://pubmed.ncbi.nlm.nih.gov/33596079/?utm_source=chatgpt.com "mokapot: Fast and Flexible Semisupervised Learning for ..."
+# A) 采集端“先判再采”（和你老师思路最接近）
+
+1. **RTS-MS3（Real-Time Search）**：MS2 实时搜库，**命中才触发 MS3**，用于 TMT/SPS-MS3 提升定量准确度、减少无效 MS3。思路和你的一致，只是他们用数据库搜索做判定。([PMC][1])
+
+   * 你可升级：把判定从“命中/不命中”换成 **target–decoy 对决 + 轻量打分（cosine/熵相似度 + EI + ppm核）**；同时导出**离线标定的 q≤1% 阈值**，便于未来“准实时”。
+
+2. **RTLS（Real-Time Library Search）**：**实时光谱库匹配**，针对样品多重化（TMT）提升仪器效率与定量准确度，本质就是“MS2 出来立判去留”。([PMC][2])
+
+   * 你可升级：他们主要做“库匹配”，**未显式引入 decoy 竞争**；你可以把 **target vs decoy 的 margin（Δ= S_t − S_d）**做成触发条件/优先级。
+
+> 小结：RTS/RTLS 已证明“MS2 先判再触发”**有效**；你的贡献＝**更好的判定函数 + 更严谨的 FDR 标定**（离线也可先做）。
+
+---
+
+# B) 谱图相似度/打分（从 cosine 往上走）
+
+1. **SpectraST / 经典谱库打分（加权点积家族）**：谱库匹配的老牌方法与工具生态。你的 baseline 理由来自这里。([PubMed][3])
+
+2. **Spectral Entropy（熵相似度）**：在大规模基准里，**熵相似度经常优于 dot-product/cosine**，对噪声更鲁棒（虽多见于小分子，但思想可迁移到肽段）。还有“ion/spectral entropy + decoy 库”的 FDR 应用。([PMC][4])
+
+3. **最新综述/实践**：重打分与预测强度结合后，**相似度不再只看几何夹角**，而是和“能否被模型解释”挂钩。([PMC][5])
+
+* 你可升级（落地快）：
+
+  * **Cosine → 熵相似度**（+ 解释强度 EI + ppm 偏差惩罚）组成**轻量组合分数**；
+  * 用 **Δ = S_target − S_decoy** 做门控与排序；
+  * 拿 **two-species entrapment** 做外部校验，避免乐观偏差（与 RTS 文献的做法一致）。([PMC][6])
+
+---
+
+# C) 打分 → FDR：统计 & 机器学习基线（你能在上面增强）
+
+1. **Percolator（半监督重打分）** / **mokapot（Python 版）**：把多维特征学成更好的 PSM 分数，显著提升真阳性，控制 FDR。你的“二阶段小模型（逻辑回归/Bradley-Terry 胜率）”可以直接套这个范式。([Nature][7])
+
+2. **PeptideProphet / iProphet（混合模型 & 概率化）**：把打分转成**后验概率**，还能整合多次证据/多引擎输出，是把“阈值→概率”的教科书路线。([PubMed][8])
+
+3. **Decoy-free / Mixture-model FDR**：**不依赖 decoy**，直接对分数分布做两组/多组混合建模（近年的方法含 skew-normal 组件等），特别适合 decoy 不靠谱的场景（DIA、低丰度、单细胞）。([Oxford Academic][9])
+
+* 你可升级（数学味更浓）：
+
+  * 把你的 **Δ/熵分数**喂进 **mokapot** 做离线重打分，输出**校准的 P(真) 后验**；
+  * 并行跑一套 **decoy-free mixture FDR**（和 TD-FDR、两物种 entrapment 对照），展示**低丰度/拥挤窗口**下的稳健优势。([PMC][10])
+
+---
+
+## 你能直接写进“方法贡献”的几句话
+
+* “沿用 **RTS/RTLS** 的‘**MS2 先判**’框架，但把判定函数升级为 **target–decoy 竞争 + 熵相似度/解释强度/ppm核** 的组合分数，并离线标定 **q≤1%** 的可迁移阈值。” ([PMC][1])
+* “在重打分/误差控制上，我们结合 **mokapot** 与 **decoy-free mixture FDR**，降低 decoy 依赖对低丰度识别的偏差。” ([PMC][10])
+
+---
+
+## 快速起步（基于这些工作的最小改进版）
+
+1. **把 cosine 换成：熵相似度 + EI + ppm 核**（轻量、好实现）；用 **Δ** 排序/门控。([PMC][4])
+2. **离线重打分**：把 (S, EI, #matched, ppm-RMSE, 简化共流出相关性) 丢给 **mokapot**；输出校准后验与 q-value。([PMC][10])
+3. **并行 FDR**：一条用 **TD-FDR**，一条用 **decoy-free mixture**；再用 **two-species entrapment** 做外部 sanity check。([Oxford Academic][9])
+
+---
+
+
