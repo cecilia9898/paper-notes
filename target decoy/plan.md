@@ -167,3 +167,86 @@
 > 先离线证明确实能让 **低丰度更少缺失、CV 更稳定、假阳性更低**，再考虑把门控前移到实时。
 
 ---
+
+# A. 采集端“门控”：和你想法最接近的
+
+* **RTS-MS3（Real-Time Search）**
+  Thermo 在 Orbitrap 上做的“MS2→（实时数据库搜索）→只在命中时触发 MS3”的工作；实测能把 **SPS-MS3 的 duty cycle 压下来**，并保持/提升定量质量。这和你要的“在 MS2 层先筛，再决定要不要 MS3”是一个路子，只是他们用**数据库搜索**而非简单 cosine。([PMC][1])
+  你可改进：把他们的“是否触发”判定函数，换成你提的 **target–decoy 对决 + 快速打分**（cosine/entropy/小模型）。
+
+* **RTLS（Real-Time Library Search）**
+  McGann 等人做了**实时光谱库匹配**，毫秒级决定触发/峰选择，特别针对 **TMT 多重定量**提升准确度。理念=“MS2 出来立判去留”。这和你想的“在 MS2 做 cosine 比对+门控”几乎同源（只是他们侧重库匹配实现）。([PMC][2])
+  你可改进：把 **decoy 参照**显式纳入 RTLS 判定（他们主要讲库匹配；你可以做“target vs decoy margin”这一刀）。
+
+> 结论：**RTS/RTLS 已经证明“MS2 先判、再触发”是有效的**。你的贡献可以是把**判定规则**从“命中/不命中”升级成**target–decoy 竞争 + 更鲁棒的相似度**，并提供更好的 **离线/在线 FDR 标定**。
+
+---
+
+# B. 谱库打分：从 cosine 出发的“更强相似度”
+
+* **SpectraST / dot-product 传统谱库匹配**
+  经典做法就是**加权点积（cosine 家族）**，很多引擎/库都这么干，是你 baseline 的学术根基。([PubMed][3])
+
+* **Spectral Entropy（熵相似度）**
+  近年证据显示：**熵相似度**在 MS/MS 谱库匹配里经常**优于点积/纯 cosine**，对噪声更鲁棒，也利于 FDR 估计（还有“ion entropy”扩展）。这恰好是你“替代 cosine”的直接候选。([PMC][4])
+
+> 你能做的：
+>
+> 1. 把 **cosine→熵相似度** 作为首个替换；
+> 2. 再加 **ppm 偏差惩罚 + 解释强度 (Explained Intensity)**，组成轻量“组合分数”；
+> 3. 做**target–decoy margin**（S_target − S_decoy）门控，并给出**等价 q≤1% 的阈值**。
+
+---
+
+# C. 打分→FDR 的统计&ML基线（你可在此之上增强）
+
+* **Percolator / mokapot（半监督重打分）**
+  用 ML 对 PSM 特征重打分，提高真阳性、控制 FDR；mokapot 是 Python 版，易改。你的“二阶段小模型（logistic/BT）胜率”就能直接借这个范式。([PubMed][5])
+
+* **PeptideProphet / iProphet（混合模型 & 概率化）**
+  老牌**混合模型**把分数变成**后验概率**并传递到肽/蛋白层；这是“把阈值变概率”的教科书做法，你的 **Δ 分数**完全可以走这套，把 **门控变成 P(胜) ≥ p***。([PMC][6])
+
+* **Decoy-free / Mixture-model FDR**
+  直接对分数分布做**两组（或多组）混合**去估 FDR，**不依赖 decoy 假设**（适合 DIA/单细胞/低丰度）。这正好能和你的“decoy 辅助、但不被 decoy 束缚”结合。([Oxford Academic][7])
+
+> 你能做的：
+>
+> * 把 **Δ 或 熵相似度**喂给 **半监督重打分**（离线），再给**混合模型 FDR**做 decoy-free 校准（并与经典 TD-FDR、two-species entrapment 对照）；
+> * 给出**门控曲线**（阈值 ↔ q-value 对照表），便于未来移植到实时/准实时。
+
+---
+
+## 你可以直接“站在肩膀上”的组合拳（可写进计划书）
+
+1. **RTS/RTLS 的思想 + 你老师的规则**
+
+   * 采纳“MS2 先判、再触发/保留”的框架（RTS/RTLS 证实其可行）；
+   * 把“是否判为 target”的**打分函数**从点积升级为 **熵相似度 + EI + ppm 核**，并引入 **target–decoy margin**；
+   * 输出**q≤1%** 的门控阈值（离线求、在线用）。
+
+2. **离线重打分 & decoy-free FDR**
+
+   * 用 mokapot/简易 logistic 把少量特征（相似度、EI、#matched、ppm-RMSE、简化共流出）变后验；
+   * 用 **混合模型**做 **decoy-free FDR** 对照，展示在低丰度/拥挤窗口的稳健性。([PubMed][8])
+
+3. **评估指标跟社区接轨**
+
+   * TMT/SPS-MS3：**缺失率↓、蛋白层 CV↓、两物种 entrapment 假阳性↓、差异蛋白↑**；
+   * 报告中引用 RTS/RTLS 的对比语境，证明“我们在**判定函数**与**FDR 标定**上做了升级”，不是重复造轮子。([PMC][1])
+
+---
+
+## 小抄：你写 related work 时能用的 1 句话
+
+* “我们沿用 **RTS/RTLS** 的‘**MS2 先判，命中才触发**’思想，但把判定从**单一命中**升级为**target–decoy 对决 + 熵相似度组合分数**，并用**混合模型/decoy-free**给出**可迁移的 q-value 门槛**。” ([PMC][1])
+
+---
+
+[1]: https://pmc.ncbi.nlm.nih.gov/articles/PMC7295121/?utm_source=chatgpt.com "Full-Featured, Real-Time Database Searching Platform ..."
+[2]: https://pmc.ncbi.nlm.nih.gov/articles/PMC11554524/?utm_source=chatgpt.com "Real-time spectral library matching for sample multiplexed ..."
+[3]: https://pubmed.ncbi.nlm.nih.gov/17295354/?utm_source=chatgpt.com "Development and validation of a spectral library searching ..."
+[4]: https://pmc.ncbi.nlm.nih.gov/articles/PMC11492813/?utm_source=chatgpt.com "Spectral entropy outperforms MS/MS dot product similarity ..."
+[5]: https://pubmed.ncbi.nlm.nih.gov/17952086/?utm_source=chatgpt.com "Semi-supervised learning for peptide identification from ..."
+[6]: https://pmc.ncbi.nlm.nih.gov/articles/PMC3489532/?utm_source=chatgpt.com "A statistical model-building perspective to identification of MS/MS ..."
+[7]: https://academic.oup.com/bioinformatics/article/36/Supplement_2/i745/6055912?utm_source=chatgpt.com "New mixture models for decoy-free false discovery rate ..."
+[8]: https://pubmed.ncbi.nlm.nih.gov/33596079/?utm_source=chatgpt.com "mokapot: Fast and Flexible Semisupervised Learning for ..."
