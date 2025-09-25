@@ -207,6 +207,58 @@ $$
 **Proteotypic peptides = 蛋白质在质谱实验里的 “指纹肽”**。
 它们是 target proteomics workflow 的核心构件：你用它们来确保结果既 **可靠检测** 又 **特异归属**。
 
+
+---
+
+## 🌍 Global profiling
+
+也叫 **全局蛋白质组学 (discovery proteomics)**，核心是：
+
+* **目标**：一次性“看全场”，尽量捕捉样本里所有能测到的蛋白。
+* **方法**：主要靠 **DDA (Data-Dependent Acquisition)** 或 **DIA (Data-Independent Acquisition)**。
+
+  * DDA = 质谱随便挑最强的离子打碎 → 偏向丰度高的蛋白。
+  * DIA = 按窗口全覆盖碎裂 → 可以比较系统性地捕捉信号。
+* **特点**：
+
+  * 范围广（上万个蛋白），适合做发现（找生物标志物、新通路）。
+  * 但定量 **不稳定**（重复性差，缺失值多）。
+
+**类比**：像扫街采访，什么人都问一遍，信息量巨大，但细节可能模糊。
+
+---
+
+## 🎯 Targeted assay
+
+也叫 **靶向蛋白质组学**，核心是：
+
+* **目标**：只看特定的一小撮蛋白/肽段（你事先定义好的 target）。
+* **方法**：典型是 **SRM/MRM (triple quadrupole)**、**PRM (Orbitrap/TOF)**。
+
+  * 比如你关心 20 个蛋白，就设计 40 条 proteotypic peptides → MS 里只盯这 40 条信号。
+* **特点**：
+
+  * 定量超稳、灵敏度高、重复性好（常用于 biomarker 验证）。
+  * 但范围窄，不能发现“新东西”。
+
+**类比**：像法庭取证，明确要找某几个人证，问得非常细，但不会管街上的其他人。
+
+---
+
+## 🔗 它们的关系
+
+* 一般 workflow：**先 global profiling → 再 targeted assay**。
+
+  * Global：帮你筛选候选蛋白（可能跟疾病相关）。
+  * Targeted：验证这些候选，做精确定量（甚至能做临床转化）。
+
+---
+
+✨ 总结：
+
+* **Global profiling** = 高通量、全景扫描，发现潜在有趣的蛋白。
+* **Targeted assay** = 高精度、针对性检测，验证和追踪特定蛋白。
+
 ---
 
 
