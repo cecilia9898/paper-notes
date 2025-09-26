@@ -207,6 +207,30 @@ git push
 
 ---
 
+# 要先加 SSH Key 到 repo
+
+# Start the agent and add your key
+eval "$(ssh-agent -s)"
+ssh-add ~/.ssh/id_ed25519
+
+# Switch remote from HTTPS → SSH
+git remote set-url origin git@github.com:YuLabProteomics/04_FDRG.git
+git remote -v   # should show git@github.com:YuLabProteomics/04_FDRG.git
+
+# Sanity check your SSH auth
+ssh -T git@github.com
+# Expect: "Hi cecilia9898! You've successfully authenticated..."
+
+# Make sure 'main' exists locally (rename if needed)
+git branch -M main
+
+# Commit something if repo is empty
+git add .
+git commit -m "Initial commit"  # (will say 'nothing to commit' if already committed; that's fine)
+
+# Push
+git push -u origin main
+
 
 
 
